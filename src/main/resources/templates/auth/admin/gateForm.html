@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!--THYMELEAF XMLNS-->
+<html xmlns:th="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Gate Form</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <script	src="/js/jquery.min.js"></script>
+    <script	src="/js/bootstrap.min.js"></script>
+    <style>
+        .fieldError{
+            border: solid red 2px !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 jumbotron">
+            <h1 class="text-center">Gate Form:</h1>
+            <div th:if="${success != null}" class="alert alert-success">
+                <h1 th:text="${success}" class="text-center"></h1>
+            </div>
+            <form th:method="${method}" th:object="${gate}" th:action="${url}" >
+                <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" />
+                    </ul>
+                </div>
+                <input th:if="${gate != null}" type="hidden" name="id" th:value="${gate?.id}" />
+                <label>Gate name:</label>
+                <input type="text" name="name" th:value="${gate?.name}" th:field="*{name}" th:class="${#fields.hasErrors('name')}? 'fieldError form-control' : 'form-control'" />
+                <label>Gate capacity:</label>
+                <input type="text" name="date" th:value="${gate?.capacity}" th:field="*{capacity}" th:class="${#fields.hasErrors('capacity')}? 'fieldError form-control' : 'form-control'" />
+                <br/>
+                <input type="submit" th:value="${method} == 'PUT' ? 'edit' : 'create' " class="form-control btn btn-success" />
+            </form>
+            <div th:if="${method == 'PUT'}">
+                <form th:method="DELETE" th:action="@{/gates/delete/}+${gate.id}">
+                    <input type="submit" value="Delete" class="form-control btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!--THYMELEAF XMLNS-->
+<html xmlns:th="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Event Statistics</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <script	src="/js/jquery.min.js"></script>
+    <script	src="/js/bootstrap.min.js"></script>
+    <script src="/js/Chart.bundle.min.js"></script>
+    <style>
+        img{
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 jumbotron">
+            <h1 class="text-center">Event Information:</h1>
+            <p th:text="'Name: '+${event.name}"></p>
+            <p th:text="'Date: '+${event.date}"></p>
+            <p th:text="'Location: '+${event.location}"></p>
+            <p th:text="'Type: '+${event.type}"></p>
+            <hr/>
+            <h3>Gates:</h3>
+            <div th:each="gate : ${event?.gates}">
+                <p th:text="${gate?.name}"></p>
+                <p th:text="'Capacity: '+${gate?.capacity}"></p>
+                <canvas th:id="${gate?.name}"></canvas>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+        let gates = [[${simpleGates}]];
+
+        window.onload = function() {
+            for(let i = 0; i < gates.length; i++){
+                let myPieChart = new Chart(document.getElementById(gates[i].name).getContext("2d"),{
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            backgroundColor: ["#3e95cd", "red"],
+                            data: [gates[i].occupied, gates[i].capacity-gates[i].occupied]
+                        }],
+
+                                // These labels appear in the legend and in the tooltips when hovering different arcs
+                        labels: [
+                            'Occupied',
+                            'Empty',
+                        ]
+                    }
+                });
+            }
+        };
+    /*]]>*/
+</script>
+</body>
+</html>

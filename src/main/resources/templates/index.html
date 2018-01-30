@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<!--THYMELEAF XMLNS-->
+<html xmlns:th="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Index Page</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <script	src="/js/jquery.min.js"></script>
+    <script	src="/js/bootstrap.min.js"></script>
+    <style>
+        img{
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        }
+        p{
+            font-weight: bold !important;
+        }
+        .jumbotron > p > span{
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <div sec:authorize="isAnonymous()" class="container">
+        <form th:action="@{/}" method="POST" class="form-signin">
+            <h3 class="form-signin-heading" th:text="Welcome"></h3>
+            <br/>
+
+            <input type="text" id="email" name="email"  th:placeholder="Email"
+                   class="form-control" /> <br/>
+            <input type="password"  th:placeholder="Password"
+                   id="password" name="password" class="form-control" /> <br />
+
+            <div align="center" th:if="${param.error}">
+                <p style="font-size: 20; color: #FF1C19;">Email or Password invalid, please verify</p>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login" type="Submit" th:text="Login"></button>
+        </form>
+
+    </div>
+    <div class="container" sec:authorize="isAuthenticated()">
+        <div class="row jumbotron">
+            <h1 class="text-center">User Profile</h1>
+            <p>First Name: <span sec:authentication="name"></span></p>
+            <p>Last Name: <span sec:authentication="principal.lastName"></span></p>
+            <p>Email: <span sec:authentication="principal.email"></span></p>
+        </div>
+    </div>
+</body>
+</html>

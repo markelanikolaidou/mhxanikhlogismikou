@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<!--THYMELEAF XMLNS-->
+<html xmlns:th="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Gates</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <script	src="/js/jquery.min.js"></script>
+    <script	src="/js/bootstrap.min.js"></script>
+    <style>
+        img{
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 jumbotron" th:each="gate : ${gates}">
+            <p th:text="${gate.name}"></p>
+            <p th:text="${gate.capacity}"></p>
+            <p th:text="${gate.event.name}+' - '+${gate.event.date}"></p>
+            <a th:href="'/gates/'+${gate.id}" th:text="View" class="form-control btn btn-info"></a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

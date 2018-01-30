@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title sec:authentication="name"></title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <script	src="/js/jquery.min.js"></script>
+    <script	src="/js/bootstrap.min.js"></script>
+    <style>
+        p{
+            font-weight: bold !important;
+        }
+        .jumbotron > p > span{
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="fragments/navbar :: navbar"></div>
+    <div class="container">
+        <div class="row jumbotron">
+            <h1 class="text-center">User Profile</h1>
+            <p>First Name: <span sec:authentication="name"></span></p>
+            <p>Last Name: <span sec:authentication="principal.lastName"></span></p>
+            <p>Email: <span sec:authentication="principal.email"></span></p>
+        </div>
+    </div>
+</body>
+</html>

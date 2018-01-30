@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--THYMELEAF XMLNS-->
+<html xmlns:th="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Ticket</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <script	src="/js/jquery.min.js"></script>
+    <script	src="/js/bootstrap.min.js"></script>
+    <style>
+        img{
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <h1 class="text-center">Ticket</h1>
+    </div>
+    <div class="row jumbotron">
+        <div class="col-md-6">
+            <h3 class="text-center">Event:</h3>
+            <p th:text="'Event: '+${ticket.gate.event.name}"></p>
+            <p th:text="'Date: '+${ticket.gate.event.date}"></p>
+            <p th:text="'Location: '+${ticket.gate.event.location}"></p>
+            <p th:text="'Type: '+${ticket.gate.event.type}"></p>
+        </div>
+        <div class="col-md-6">
+            <h3 class="text-center">Person:</h3>
+            <p th:text="'First name: '+${ticket.first_name}"></p>
+            <p th:text="'Last name: '+${ticket.last_name}"></p>
+            <p th:text="${ticket.gate} != null ? 'Gate: '+${ticket.gate.name} : 'None'"></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <a th:href="@{/tickets/edit/}+${ticket.id}" th:text="Edit" class="form-control btn btn-warning"></a>
+            <form th:action="@{/tickets/delete/}+${ticket.id}" th:method="DELETE">
+                <input type="submit" value="Delete" class="form-control btn btn-danger" />
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

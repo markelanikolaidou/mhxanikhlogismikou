@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--THYMELEAF XMLNS-->
+<html xmlns:th="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Event Form</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <script	src="/js/jquery.min.js"></script>
+    <script	src="/js/bootstrap.min.js"></script>
+    <style>
+        .fieldError{
+            border: solid red 2px !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 jumbotron">
+            <h1 class="text-center">Event Form:</h1>
+            <div th:if="${success != null}" class="alert alert-success">
+                <h1 th:text="${success}" class="text-center"></h1>
+            </div>
+            <form th:method="${method}" th:object="${event}" th:action="${url}" >
+                <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" />
+                    </ul>
+                </div>
+                <input th:if="${event != null}" type="hidden" name="id" th:value="${event?.id}" class="form-control" />
+                <label>Event name:</label>
+                <input type="text" name="name" th:value="${event?.name}" th:field="*{name}" th:class="${#fields.hasErrors('name')}? 'fieldError form-control' : 'form-control'" />
+                <label>Event date:</label>
+                <input type="text" name="date" th:value="${event?.date}" th:field="*{date}" th:class="${#fields.hasErrors('date')}? 'fieldError form-control' : 'form-control'" />
+                <label>Location:</label>
+                <input type="text" name="location" th:value="${event?.location}" th:field="*{location}" th:class="${#fields.hasErrors('location')}? 'fieldError form-control' : 'form-control'" />
+                <label>Type:</label>
+                <input type="text" name="type" th:value="${event?.type}" th:field="*{type}" th:class="${#fields.hasErrors('type')}? 'fieldError form-control' : 'form-control'" />
+                <br/>
+                <input type="submit" th:value="${method} == 'PUT' ? 'edit' : 'create' " class="form-control btn btn-success" />
+            </form>
+            <div th:if="${method == 'PUT'}">
+                <form th:method="DELETE" th:action="@{/events/delete/}+${event.id}">
+                    <input type="submit" value="Delete" class="form-control btn btn-danger" />
+                </form>
+                <h1 class="text-center">Gates:</h1>
+                <div th:each="gate : ${event?.gates}">
+                    <a th:href="'/gates/edit/'+${gate?.id}" th:text="'Name:'+${gate?.name}+' - Capacity:'+${gate?.capacity}" class="form-control btn btn-warning"></a>
+                </div>
+                <a th:href="'/gates/create/'+${event?.id}" th:text="'Add Gate'" class="form-control btn btn-success"></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

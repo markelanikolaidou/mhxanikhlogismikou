@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--THYMELEAF XMLNS-->
+<html xmlns:th="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Ticket Form</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"></link>
+    <script	src="/js/jquery.min.js"></script>
+    <script	src="/js/bootstrap.min.js"></script>
+    <style>
+        .fieldError{
+            border: solid red 2px !important;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="fragments/navbar :: navbar"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2 jumbotron">
+            <h1 class="text-center">Ticket Form:</h1>
+            <div th:if="${success != null}" class="alert alert-success">
+                <h1 th:text="${success}" class="text-center"></h1>
+            </div>
+            <form th:method="${method}" th:object="${ticket}" th:action="${url}" >
+                <div th:if="${#fields.hasAnyErrors()}" class="alert alert-danger">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" />
+                    </ul>
+                </div>
+                <input th:if="${ticket != null}" type="hidden" name="id" th:value="${ticket?.id}" class="form-control" />
+                <label>First Name:</label>
+                <input type="text" name="first_name" th:value="${ticket?.first_name}" th:field="*{first_name}" th:class="${#fields.hasErrors('first_name')}? 'fieldError form-control' : 'form-control'" />
+                <label>Last Name:</label>
+                <input type="text" name="last_name" th:value="${ticket?.last_name}" th:field="*{last_name}" th:class="${#fields.hasErrors('last_name')}? 'fieldError form-control' : 'form-control'" />
+                <label>Email:</label>
+                <input type="email" name="email" th:value="${ticket?.email}" th:field="*{email}" th:class="${#fields.hasErrors('email')}? 'fieldError form-control' : 'form-control'" />
+                <label>phone:</label>
+                <input type="phone" name="phone" th:value="${ticket?.phone}" th:field="*{phone}" th:class="${#fields.hasErrors('phone')}? 'fieldError form-control' : 'form-control'" />
+                <br/>
+                <input type="submit" th:value="${method} == 'PUT' ? 'edit' : 'create' " class="form-control btn btn-success" />
+            </form>
+            <div th:if="${method == 'PUT'}">
+                <form th:method="DELETE" th:action="@{/tickets/delete/}+${ticket.id}">
+                    <input type="submit" value="Delete" class="form-control btn btn-danger" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
